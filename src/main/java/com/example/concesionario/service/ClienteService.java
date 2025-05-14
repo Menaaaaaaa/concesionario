@@ -17,18 +17,37 @@ public class ClienteService {
     }
 
     public List<Cliente> getAllClientes() {
-        return clienteRepository.findAll();
+        try {
+            return clienteRepository.findAll();
+        } catch (Exception error) {
+            throw new RuntimeException("Error al obtener los clientes", error);
+        }
     }
 
-    public Optional<Cliente> getClienteById(Integer id) {
-        return clienteRepository.findById(id);
+    public Cliente getClienteById(Integer id) {
+        try {
+            return clienteRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Cliente con ID " + id + " no encontrado"));
+        } catch (Exception error) {
+            throw new RuntimeException("Error al obtener el cliente con ID " + id, error);
+        }
     }
 
     public Cliente saveCliente(Cliente cliente) {
-        return clienteRepository.save(cliente);
+        try {
+            return clienteRepository.save(cliente);
+        } catch (Exception error) {
+            throw new RuntimeException("Error al guardar el cliente", error);
+        }
     }
 
     public void deleteCliente(Integer id) {
-        clienteRepository.deleteById(id);
+        try {
+            Cliente cliente = clienteRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Cliente con ID " + id + " no encontrado"));
+            clienteRepository.delete(cliente);
+        } catch (Exception error) {
+            throw new RuntimeException("Error al eliminar el cliente con ID " + id, error);
+        }
     }
 }
