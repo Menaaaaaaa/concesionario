@@ -40,6 +40,23 @@ public class VehiculoService {
         }
     }
 
+    public Vehiculo updateVehiculo(String placa, Vehiculo vehiculoActualizado) {
+        try {
+            Vehiculo existente = vehiculoRepository.findByPlaca(placa)
+                    .orElseThrow(() -> new RuntimeException("Vehículo con placa " + placa + " no encontrado"));
+
+            existente.setMarca(vehiculoActualizado.getMarca());
+            existente.setModelo(vehiculoActualizado.getModelo());
+            existente.setValor(vehiculoActualizado.getValor());
+            existente.setActivo(vehiculoActualizado.getActivo());
+
+            return vehiculoRepository.save(existente);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al actualizar el vehículo con placa " + placa, e);
+        }
+    }
+
+
     public void deleteVehiculo(String placa) {
         try {
             Vehiculo vehiculo = vehiculoRepository.findById(placa)
