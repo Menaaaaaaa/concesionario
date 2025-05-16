@@ -5,7 +5,6 @@ import com.example.concesionario.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -40,6 +39,23 @@ public class ClienteService {
             throw new RuntimeException("Error al guardar el cliente", error);
         }
     }
+
+    public Cliente updateCliente(Integer id, Cliente clienteActualizado) {
+        try {
+            Cliente clienteExistente = clienteRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Cliente con ID " + id + " no encontrado"));
+
+            clienteExistente.setNombre(clienteActualizado.getNombre());
+            clienteExistente.setDireccion(clienteActualizado.getDireccion());
+            clienteExistente.setTelefono(clienteActualizado.getTelefono());
+            clienteExistente.setActivo(clienteActualizado.getActivo());
+
+            return clienteRepository.save(clienteExistente);
+        } catch (Exception error) {
+            throw new RuntimeException("Error al actualizar el cliente con ID " + id, error);
+        }
+    }
+
 
     public void deleteCliente(Integer id) {
         try {
