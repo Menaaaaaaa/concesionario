@@ -46,6 +46,17 @@ public class VehiculoController {
         }
     }
 
+    @PutMapping("/{placa}")
+    public ResponseEntity<Vehiculo> actualizarVehiculo(@PathVariable String placa, @RequestBody Vehiculo vehiculoActualizado) {
+        try {
+            Vehiculo vehiculo = vehiculoService.updateVehiculo(placa, vehiculoActualizado);
+            return ResponseEntity.ok(vehiculo);
+        } catch (Exception error) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
     @DeleteMapping("/{placa}")
     public ResponseEntity<Void> eliminarVehiculo(@PathVariable String placa) {
         try {
